@@ -5,21 +5,33 @@ from .models import Major , Course
 User = get_user_model()
 
 
-# class MajorSerializer(serializers.ModelSerializer):
-# 	class Meta:
-# 		model = Major
-# 		fields = ['name']
+class MajorSerializer(serializers.ModelSerializer):
+	
+	class Meta:
+		model = Major
+		fields = ['name','id']
+
+class CourseSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Course
+		fields =['name','id']
 
 # class CourseSerializer(serializers.ModelSerializer):
 # 	class Meta:
 # 		model = Course
 # 		fields = ['name']
 
+# class MajorSerializer(serializers.ModelSerializer):
+# 	class Meta:
+# 		model = Major
+# 		fields = ['name']
+
 
 class SignUpSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(style={"input_type":"password"}, write_only=True)
-	# major = serializers.SerializerMethodField()
-	# course = serializers.SerializerMethodField()
+	# major = MajorSerializer()
+	# course = CourseSerializer(many=True)
+	# course = CourseSerializer(read_only=False,many=True)
 	# course = serializers.MultipleChoiceField(choices=['Operating System', 'Nano', 'physics'])
 	# course = serializers.SlugRelatedField(slug_field='course', read_only=True, many=True)
 	# major = serializers.SlugRelatedField(read_only=True, slug_field='major')
@@ -46,6 +58,15 @@ class SignUpSerializer(serializers.ModelSerializer):
 		new_user.course.set(course)
 		new_user.save()
 		return validated_data
+
+
+class Profile_Detail(serializers.ModelSerializer):
+	major = MajorSerializer()
+	course = CourseSerializer(many=True)
+	class Meta:
+		model= User 
+		fields =['username', 'email','major','course']
+
 
 
 
